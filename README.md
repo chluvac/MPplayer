@@ -11,3 +11,5 @@ Changelog:
 14.10. Přes výkend nebyl čas, o hodině výklad - nic
 
 21.10. Zase nic
+
+27.10. Nic
