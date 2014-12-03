@@ -20,4 +20,6 @@ Changelog:
 
 17.11. Nic
 
-14.11. Nic
+24.11. Nic
+
+1.12. Nic
