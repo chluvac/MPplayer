@@ -1,107 +1,136 @@
 package com.example.vasek.mp;
 
 import android.app.Activity;
-<<<<<<< HEAD
 import android.database.Cursor;
-import android.media.AudioManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
-import android.media.MediaPlayer;
+
+import java.io.IOException;
 
 public class MainActivity extends Activity {
 
-    public void listViewPrep(){ //předá data z tabulky do kurzoru, do adaptéru a do listView
+    //TODO dodělat loop na playbacku
+    //TODO setFolder - dialog na nastavení složky s hudbou
+    //TODO - elsy v clicklisteneru
 
-        libSQLiteHelper database = new libSQLiteHelper(this);
+    //kdybybylčas TODO při zobrazení fronty dlouhý kliknutí smaže předmět
+    //kdybybylčas TODO a krátký to bude posouvat nahoru
+    //kdybybylčas TODO nějaký elegantní prostředí
+    //kdybybylčas TODO zapouzdřit clickHandlery do podmínky, když ukazuju frontu tak to nedělej
 
-        String query = "SELECT id, title, location FROM lib";
-        Cursor libCursor = libSQLiteHelper.library.rawQuery(query, null);  //data z tabulky do kurzoru, ZATÍM OK
+    PlaybackManager playback = new PlaybackManager(this);
+    DBHelper database = new DBHelper();
+    SQLiteDatabase library = database.getWritableDatabase();
+    AdapterCreator adapterCreator = new AdapterCreator();
 
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
-                R.layout.activity_main, libCursor, database.library.lib.title, libCursor.getCount(), 0); //TODO: jak je to s argumenty, jak je to s vytvářením tabulky
-        ListView listView = (ListView) findViewById(R.id.listView);
-        listView.setAdapter(adapter); //nastavuje adapter pro listView, dá do něj data z kurzoru
-        //TODO: array, kde bude uloženo co se má hrát - jenom ID v tabulce
+    public void listViewPrep(){ //dá data do listview - buď frontu nebo podle queryC
+        /*if(showQueue){
+            ArrayAdapter adapter = new ArrayAdapter(this, R.layout.activity_main, playback.getQueueTitles());
+            ListView listView = (ListView) findViewById(android.R.id.list);
+            listView.setAdapter(adapter);
+        } else{
+            /*String query = queryC.getQuery(); //předá data z tabulky do kurzoru, do adaptéru a do listView
+            Cursor libCursor = library.rawQuery(query, null);
+            SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
+                    R.layout.activity_main, libCursor, new String[] {"title"}, new int[] {libCursor.getCount()});*/
+
+            ListView listView = (ListView) findViewById(android.R.id.list);
+            listView.setAdapter(adapterCreator.getAdapter(getApplicationContext(), playback.getQueueTitles())); //nastavuje adapter pro listView, dá do něj data z kurzoru
+        //}
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) { //při vytvoření načte xml main
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main); //vytvoří UI
-        listViewPrep();  //načte tabulku do listView
-=======
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-
-public class MainActivity extends Activity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {    //při vytvoření načte xml main
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
->>>>>>> 53f39c7b0660742e31356b82f8726de35f41e8ea
+        listViewPrep();
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) { //zatím nic
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.browse, menu);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) { //ehm
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
+    public boolean onOptionsItemSelected(MenuItem item) { //nastaví queryC kategorii
+        switch (item.getItemId()) {
+            case R.id.showAll:
+                adapterCreator.setAlbum(null);
+                adapterCreator.setShowCategory(0);
+                this.listViewPrep();
+                return true;
+            case R.id.showQueue:
+                adapterCreator.setShowCategory(3);
+                this.listViewPrep();
+                return true;
+            case R.id.showInterprets:
+                adapterCreator.setShowCategory(1);
+                listViewPrep();
+                return true;
+            case R.id.reloadDatabase:
+                database.dataUpdate();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    public Uri findFileUri(String ID){
+        String query = "SELECT location FROM tab WHERE id ?";
+        Cursor uriCursor = library.rawQuery(query, new String[] {ID});
+        Uri value = Uri.parse(uriCursor.getString(1));
+        return value;
+    }
+
+    public String findFileTitle(String ID){
+        String query = "SELECT title FROM tab WHERE id ?";
+        Cursor uriCursor = library.rawQuery(query, new String[] {ID});
+        String value = uriCursor.getString(1);
+        return value;
+    }
+
+    public void startPlaying(){
+        try {
+            playback.startPlaying(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public AdapterView.OnItemClickListener clickHandler = new AdapterView.OnItemClickListener() { //na kliknutí poslat do fronty
+        public void onItemClick(AdapterView parent, View v, int position, long id) {
+            if (adapterCreator.getShowCategory() == 0){
+                playback.onClick(findFileUri(Long.toString(id)), (Long.toString(id)));
+                startPlaying();
+            } else if (adapterCreator.getShowCategory() == 1){
+
+            } else if (adapterCreator.getShowCategory() == 1){
+
+            }
+            //TODO dodělat elsy - pošle na co to kliklo a musí to poznat autora či album - buď podle position nebo si vedle udělat pole id pro daný interprety
+        }
+    };
+
+    private AdapterView.OnItemLongClickListener longClickHandler = new AdapterView.OnItemLongClickListener() {//na dlouhý kliknutí přehnrát
+        public boolean onItemLongClick(AdapterView parent, View v, int position, long id) {
+            if (adapterCreator.getShowCategory() == 0){
+                playback.onLongClick(findFileUri(Long.toString(id)), findFileTitle(Long.toString(id)));
+                startPlaying();
+            }
             return true;
         }
-        return super.onOptionsItemSelected(item);
-    }
+    };
 
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 53f39c7b0660742e31356b82f8726de35f41e8ea
-    public void reloadDatabase(){ //Mělo by fungovat
-        libSQLiteHelper.dataUpdate(libSQLiteHelper.library);
-    }
-
-<<<<<<< HEAD
-
-
-
-
-    public void play() {    //TODO
-       if (true /*hraje*/){ /*nehraj*/}
-       else {/*hraj*/ }
-
-        Uri myUri = ; //TODO: dosadit z kurzoru
-        MediaPlayer mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mediaPlayer.setDataSource(getApplicationContext(), myUri);
-        mediaPlayer.prepare();
-        mediaPlayer.start();
-=======
-    public void play() {    //TODO
-       if (true /*hraje*/){ /*nehraj*/}
-       else {/*hraj*/ }
->>>>>>> 53f39c7b0660742e31356b82f8726de35f41e8ea
-    }
-
-    public void next() {    //TODO
-        //přeskoč na další
-    }
-
-    public void prev() {    //TODO
-        //přeskoč na předchozí
+    public void playButton() {
+        playback.playButton();
     }
 }

@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".browse" >
+    <item android:id="@+id/showAll"
+        android:title="Vše"/>
+
+    <item android:id="@+id/showQueue"
+        android:title="Fronta"/>
+
+    <item android:id="@+id/showInterprets"
+        android:title="Interpreti"/>
+
+    <item android:id="@+id/setFolder"
+        android:title="Nastavit složku"/>
+
+    <item android:id="@+id/reloadDatabase"
+        android:title="Aktualizovat databázi"/>
+</menu>
