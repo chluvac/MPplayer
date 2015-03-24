@@ -5,8 +5,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import java.io.File;
 import android.os.Environment;
+<<<<<<< HEAD
 import android.media.MediaMetadataRetriever;
 
+=======
+>>>>>>> 53f39c7b0660742e31356b82f8726de35f41e8ea
             //databáze - library
             //tabulka - lib
 
@@ -16,10 +19,16 @@ public class libSQLiteHelper extends SQLiteOpenHelper{
     public static final String DATABASE_NAME = "library";
     public static SQLiteDatabase library;   //jestli tu je nějáká vopičárna tak asi tady
 
+<<<<<<< HEAD
     libSQLiteHelper(Context context){ //konstruktor
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         onCreate(library);
     }
+=======
+    libSQLiteHelper(Context context){
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    } //konstruktor
+>>>>>>> 53f39c7b0660742e31356b82f8726de35f41e8ea
 
     @Override
     public void onCreate(SQLiteDatabase db) {   //vytvoří tabulku pro data
@@ -28,12 +37,17 @@ public class libSQLiteHelper extends SQLiteOpenHelper{
                 "title TEXT, "+
                 "interpret TEXT, "+
                 "album TEXT, "+
+<<<<<<< HEAD
                 "trackNr INTEGER, "+
+=======
+                "songNr INTEGER, "+
+>>>>>>> 53f39c7b0660742e31356b82f8726de35f41e8ea
                 "location TEXT )";
         db.execSQL(create_table);
     }
 
     @Override
+<<<<<<< HEAD
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) { //zbytečný, ale povinný
     }
 
@@ -55,10 +69,28 @@ public class libSQLiteHelper extends SQLiteOpenHelper{
                                         metaRetriever.extractMetadata(0) + "," +
                                         f.getAbsolutePath() + ")";
                     db.execSQL(save_to_table); //sem prošlý mp3 uloží do tabulky včetně metadat
+=======
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+    }
+
+    public static void dataUpdate(SQLiteDatabase db){
+            db.execSQL("DELETE FROM IF EXISTS lib");        //reset tabulky
+
+            File[] file = Environment.getExternalStorageDirectory().listFiles();
+            for (File f : file) {
+                if (f.isFile() && f.getAbsolutePath().endsWith(".mp3")) { //všechny mp3 projdou sem
+                    String save_to_table = "INSERT INTO lib (title, location)" +
+                            "values(" + f.getAbsolutePath() + "," + f.getAbsolutePath() + ")";
+                    db.execSQL(save_to_table); //sem prošlý mp3 uloží do tabulky
+>>>>>>> 53f39c7b0660742e31356b82f8726de35f41e8ea
                 }
             }
 
     }
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 53f39c7b0660742e31356b82f8726de35f41e8ea
 }

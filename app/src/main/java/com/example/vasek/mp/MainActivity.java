@@ -1,6 +1,7 @@
 package com.example.vasek.mp;
 
 import android.app.Activity;
+<<<<<<< HEAD
 import android.database.Cursor;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -32,6 +33,18 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main); //vytvoří UI
         listViewPrep();  //načte tabulku do listView
+=======
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+
+public class MainActivity extends Activity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {    //při vytvoření načte xml main
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+>>>>>>> 53f39c7b0660742e31356b82f8726de35f41e8ea
     }
 
     @Override
@@ -54,10 +67,15 @@ public class MainActivity extends Activity {
     }
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 53f39c7b0660742e31356b82f8726de35f41e8ea
     public void reloadDatabase(){ //Mělo by fungovat
         libSQLiteHelper.dataUpdate(libSQLiteHelper.library);
     }
 
+<<<<<<< HEAD
 
 
 
@@ -72,6 +90,11 @@ public class MainActivity extends Activity {
         mediaPlayer.setDataSource(getApplicationContext(), myUri);
         mediaPlayer.prepare();
         mediaPlayer.start();
+=======
+    public void play() {    //TODO
+       if (true /*hraje*/){ /*nehraj*/}
+       else {/*hraj*/ }
+>>>>>>> 53f39c7b0660742e31356b82f8726de35f41e8ea
     }
 
     public void next() {    //TODO
