@@ -22,14 +22,14 @@ public class AdapterCreator {
 
     private String interpret;
     private String album;
+    private ArrayList<String> interprets = new ArrayList<String>();
 
-    DBHelper database = new DBHelper();
-    SQLiteDatabase library = database.getWritableDatabase();
+    public AdapterCreator (Context context){
+    }
+
     public void setShowCategory(int c){
         this.showCategory = c;
     }
-
-    ArrayList<String> interprets = new ArrayList<String>();
 
     public void setInterpret(String i){
         this.interpret = i;
@@ -43,38 +43,38 @@ public class AdapterCreator {
         return this.showCategory;
     }
 
-    private ListAdapter adapterAll(Context context){ //TODO: když chci vše, vynulovat album
+    private ListAdapter adapterAll(Context context){ //vypíše všechno z databáze nebo všechno v albu
         if (album.isEmpty()){
             String query = "SELECT _id, title FROM tab ORDER BY _id ASC";
-            Cursor libCursor = library.rawQuery(query, null);
+            Cursor libCursor = MainActivity.dbHandler.runQuery(query, null);
             SimpleCursorAdapter adapter = new SimpleCursorAdapter(context,
                     R.layout.activity_main, libCursor, new String[] {"title"}, new int[] {libCursor.getCount()});
             return adapter;
         } else {String query = "SELECT _id, title FROM tab WHERE album " + album + " ORDER BY _id ASC";
-        Cursor libCursor = library.rawQuery(query, null);
+        Cursor libCursor = MainActivity.dbHandler.runQuery(query, null);
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(context,
                R.layout.activity_main, libCursor, new String[] {"title"}, new int[] {libCursor.getCount()});
         return adapter;
         }
     }
 
-    private ListAdapter adapterInterprets(Context context){
-        String query = "SELECT DISTINCT interprets FROM tab ORDER BY interpret";
-        Cursor libCursor = library.rawQuery(query, null);
+    private ListAdapter adapterInterprets(Context context){ //vypíše interprety
+        String query = "SELECT DISTINCT _id, interprets FROM tab ORDER BY interpret ASC";
+        Cursor libCursor = MainActivity.dbHandler.runQuery(query, null);
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(context,
                 R.layout.activity_main, libCursor, new String[] {"title"}, new int[] {libCursor.getCount()});
         return adapter;
     }
 
-    private ListAdapter adapterAlbums(Context context){
-        String query = "SELECT DISTINCT album FROM tab WHERE interpret " + interpret + " ORDER BY album ASC";
-        Cursor libCursor = library.rawQuery(query, null);
+    private ListAdapter adapterAlbums(Context context){ //vypíše alba pro daného interpreta
+        String query = "SELECT DISTINCT _id, album FROM tab WHERE interpret " + interpret + " ORDER BY album ASC";
+        Cursor libCursor = MainActivity.dbHandler.runQuery(query, null);
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(context,
                 R.layout.activity_main, libCursor, new String[] {"title"}, new int[] {libCursor.getCount()});
         return adapter;
     }
 
-    public ListAdapter adapterQueue(Context context, ArrayList titles){ //TODO arrayadapter
+    public ListAdapter adapterQueue(Context context, ArrayList titles){
         ArrayAdapter adapter = new ArrayAdapter(context, R.layout.activity_main, titles);
         return adapter;
     }
