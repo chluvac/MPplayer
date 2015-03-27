@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.vasek.mp" >
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE"/>
     <uses-sdk android:minSdkVersion="11"/>
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@android:style/Theme.Holo">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name" >

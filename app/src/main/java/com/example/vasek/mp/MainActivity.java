@@ -9,25 +9,25 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import java.io.IOException;
 
 public class MainActivity extends Activity {
 
-    //TODO dodělat loop na playbacku
-    //TODO - elsy v clicklisteneru
-
-
     private PlaybackManager playback = new PlaybackManager(this);
-    private AdapterCreator adapterCreator = new AdapterCreator(this);
+    private AdapterCreator adapterCreator = new AdapterCreator();
     public static DatabaseHandler dbHandler;
+    ListView listView;
+    ListAdapter a;
 
     public void listViewPrep(){ //dá data z adapterCreatoru do listview
-        ListView listView = (ListView) findViewById(android.R.id.list);
-        listView.setAdapter(adapterCreator.getAdapter(getApplicationContext(), playback.getQueueTitles())); //nastavuje adapter pro listView, dá do něj data z kurzoru
+        a = adapterCreator.getAdapter(getApplicationContext(), playback.getQueueTitles());
+        listView.setAdapter(a); //nastavuje adapter pro listView, dá do něj data z kurzoru
     }
 
     @Override
@@ -36,7 +36,10 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         dbHandler = new DatabaseHandler(this);
         dbHandler.open();
-        listViewPrep();
+        listView = (ListView) findViewById(android.R.id.list);
+        this.listViewPrep();
+        listView.setOnItemClickListener(clickHandler);
+        listView.setOnItemLongClickListener(longClickHandler);
     }
 
     @Override
@@ -52,17 +55,11 @@ public class MainActivity extends Activity {
                 playback.playButton();
                 return true;
             case R.id.showAll:
-                adapterCreator.setAlbum(null);
-                adapterCreator.setInterpret(null);
                 adapterCreator.setShowCategory(0);
                 this.listViewPrep();
                 return true;
             case R.id.showQueue:
                 adapterCreator.setShowCategory(3);
-                this.listViewPrep();
-                return true;
-            case R.id.showInterprets:
-                adapterCreator.setShowCategory(1);
                 this.listViewPrep();
                 return true;
             case R.id.reloadDatabase:
@@ -81,17 +78,17 @@ public class MainActivity extends Activity {
         }
     }
 
-    public AdapterView.OnItemClickListener clickHandler = new AdapterView.OnItemClickListener() { //na kliknutí pošle do fronty
+    public void onQueueClick(int position){
+        playback.onQueueItemClick(position);
+        listViewPrep();
+    }
+
+    private AdapterView.OnItemClickListener clickHandler = new AdapterView.OnItemClickListener() { //na kliknutí pošle do fronty
         public void onItemClick(AdapterView parent, View v, int position, long id) {
             if (adapterCreator.getShowCategory() == 0){
-                playback.onClick(dbHandler.findFileUri(Long.toString(id)), (Long.toString(id)));
+                playback.onClick(dbHandler.findFileUri(Long.toString(id)), dbHandler.findFileTitle(Long.toString(id)));
                 startPlaying();
-            } else if (adapterCreator.getShowCategory() == 1){
-
-            } else if (adapterCreator.getShowCategory() == 1){
-
             }
-            //TODO dodělat elsy - pošle na co to kliklo a musí to poznat autora či album - buď podle position nebo si vedle udělat pole id pro daný interprety
         }
     };
 
@@ -100,6 +97,8 @@ public class MainActivity extends Activity {
             if (adapterCreator.getShowCategory() == 0){
                 playback.onLongClick(dbHandler.findFileUri(Long.toString(id)), dbHandler.findFileTitle(Long.toString(id)));
                 startPlaying();
+            } else if (adapterCreator.getShowCategory() == 3){
+                onQueueClick(position);
             }
             return true;
         }

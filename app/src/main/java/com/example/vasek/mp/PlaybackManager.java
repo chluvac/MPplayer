@@ -13,41 +13,35 @@ public class PlaybackManager {
     public MediaPlayer mediaPlayer = new MediaPlayer();
     private ArrayList<Uri> queue = new ArrayList<Uri>();
     private ArrayList<String> queueTitles = new ArrayList<String>();
-
+    boolean wasPaused;
+    Context context;
 
     MediaPlayer.OnCompletionListener listener = new MediaPlayer.OnCompletionListener(){ //když dohraje resetuje MP
         @Override
         public void onCompletion(MediaPlayer mediaPlayer){ //TODO: má zavolat startPlaying, aby začla hrát další z fronty, ale context nejde
-            mediaPlayer.reset();
-            queue.remove(1);
-            //MainActivity.startPlaying();
+            if (!wasPaused){queue.remove(0);
+                queueTitles.remove(0);
+                mediaPlayer.reset();
+                try {
+                    startPlaying(context);
+                } catch (IOException e) {}
+            }
         }
     };
 
-    public PlaybackManager(Context context){ //připraví MP
+    public PlaybackManager(Context ctx){ //připraví MP
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mediaPlayer.setOnCompletionListener(listener);
-        try {
-            startPlaying(context);
-        } catch (IOException e) {
-        }
-    }
-
-    public ArrayList getQueue(){
-        return this.queue;
+        context = ctx;
     }
 
     public ArrayList getQueueTitles(){
         return this.queueTitles;
     }
 
-    public int getQueueSize(){
-        return this.queue.size();
-    }
-
     public void startPlaying(Context context) throws IOException { //začne hrát jestli nehraje a fronta není prázdná
         if(!mediaPlayer.isPlaying() && !queue.isEmpty()){
-            mediaPlayer.setDataSource(context, queue.get(1));
+            mediaPlayer.setDataSource(context, queue.get(0));
             mediaPlayer.prepare();
             mediaPlayer.start();
         }
@@ -67,11 +61,25 @@ public class PlaybackManager {
     }
 
     public void playButton(){ //tlačítko spustit/pauznout
-        if(mediaPlayer.isPlaying()){
-            mediaPlayer.pause();
+        if(queue.isEmpty()){}else{
+            if(mediaPlayer.isPlaying()){
+                mediaPlayer.pause();
+                wasPaused = true;
+            }else{
+                mediaPlayer.start();
+                wasPaused = false;
+            }
         }
-        if(!mediaPlayer.isPlaying()){
-            mediaPlayer.start();
+    }
+
+    public void onQueueItemClick(int position){ //smaže položku z fronty
+        this.queue.remove(position);
+        this.getQueueTitles().remove(position);
+        if(position == 0){
+            mediaPlayer.reset();
+            try {
+                startPlaying(context);
+            } catch (IOException e) {}
         }
     }
 }
