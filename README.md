@@ -2,7 +2,7 @@ MPplayer
 ========
 Jednoduchý hudební přehrávač s možností seřazovat skladby do fronty.
 
-Instalační soubor: MPlayer_install.apk
+Instalační soubor: https://github.com/chluvac/MPplayer/releases/tag/untagged-574c54b74076d9617fa2
 
 Changelog:
 
