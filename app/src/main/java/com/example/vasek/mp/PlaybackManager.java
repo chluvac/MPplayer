@@ -1,5 +1,7 @@
 package com.example.vasek.mp;
 
+import android.app.IntentService;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -8,7 +10,7 @@ import java.util.ArrayList;
 import android.content.Context;
 
 
-public class PlaybackManager {
+public class PlaybackManager extends IntentService {
 
     public MediaPlayer mediaPlayer = new MediaPlayer();
     private ArrayList<Uri> queue = new ArrayList<Uri>();
@@ -30,6 +32,7 @@ public class PlaybackManager {
     };
 
     public PlaybackManager(Context ctx){ //připraví MP
+        super("MPayler");
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         mediaPlayer.setOnCompletionListener(listener);
         context = ctx;
@@ -81,5 +84,10 @@ public class PlaybackManager {
                 startPlaying(context);
             } catch (IOException e) {}
         }
+    }
+
+    @Override
+    protected void onHandleIntent(Intent intent) {
+
     }
 }
