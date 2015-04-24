@@ -25,7 +25,6 @@ public class DatabaseHandler { //přístup k databázi jen odtud
 
     public void open() { //otevře databázi
         database = dbHelper.getWritableDatabase();
-        //dbHelper.onCreate(database);
     }
 
     public Cursor runQuery(String query, String [] args){ //projede příkaz databází
@@ -65,9 +64,14 @@ public class DatabaseHandler { //přístup k databázi jen odtud
 
     public String findExternalStoragePath(){
         String [] paths = { "/storage/sdcard1/hudba",
+                "/sdcard/hudba",
                 "/storage/extSdCard/hudba",
                 "/storage/sdcard/hudba",
+                "/mnt/sdcard/hudba",
+                "/mnt/extSdCard/hudba",
                 "/storage/sdcard0/hudba",
+                "/mnt/sdcard0/hudba",
+                "/mnt/storage/sdcard/hudba",
                 "/emmc/hudba",
                 "/mnt/sdcard/external_sd/hudba",
                 "/mnt/external_sd/hudba",
@@ -78,7 +82,6 @@ public class DatabaseHandler { //přístup k databázi jen odtud
                 "/mnt/Removable/MicroSD/hudba",
                 "/Removable/MicroSD/hudba",
                 "/mnt/external1/hudba",
-                "/mnt/extSdCard/hudba",
                 "/mnt/extsd/hudba"
         };
         for(String p : paths){
@@ -96,21 +99,24 @@ public class DatabaseHandler { //přístup k databázi jen odtud
 
         ArrayList<File> list= new ArrayList<File>();
         String path = findExternalStoragePath();
-        File dir = new File (path);
-        getFiles(list, dir);
 
-        for (File f : list) {
-            if (f.isFile() && f.getAbsolutePath().endsWith(".mp3")) {
-                MediaMetadataRetriever metaRetriever;
-                metaRetriever = new MediaMetadataRetriever();
-                metaRetriever.setDataSource(f.getAbsolutePath());
-                ContentValues cv = new ContentValues();
-                cv.put("title", metaRetriever.extractMetadata(7));
-                cv.put("interpret", metaRetriever.extractMetadata(2));
-                cv.put("album", metaRetriever.extractMetadata(1));
-                cv.put("trackNr", metaRetriever.extractMetadata(0));
-                cv.put("location", f.getAbsolutePath());
-                database.insert("tab", "Neznámé", cv);
+        if(path == null){} else {
+            File dir = new File (path);
+            getFiles(list, dir);
+
+            for (File f : list) {
+                if (f.isFile() && f.getAbsolutePath().endsWith(".mp3")) {
+                    MediaMetadataRetriever metaRetriever;
+                    metaRetriever = new MediaMetadataRetriever();
+                    metaRetriever.setDataSource(f.getAbsolutePath());
+                    ContentValues cv = new ContentValues();
+                    cv.put("title", metaRetriever.extractMetadata(7));
+                    cv.put("interpret", metaRetriever.extractMetadata(2));
+                    cv.put("album", metaRetriever.extractMetadata(1));
+                    cv.put("trackNr", metaRetriever.extractMetadata(0));
+                    cv.put("location", f.getAbsolutePath());
+                    database.insert("tab", "Neznámé", cv);
+                }
             }
         }
     }
