@@ -12,7 +12,7 @@ Jednoduchý hudební přehrávač s možností seřazovat skladby do fronty.
 ###Instalace
 K instalaci aplikace je potřeba pouze stažený release. Před jeho otevřením v zařízení je třeba dočasně povolit instalaci z neznámých zdrojů v Nastavení - Osobní - Zabezpečení.
 ###Spuštění
-Aplikace má přístup pouze k soborům ve složce 'hudba' na externí SD kartě. Po prvním spuštění tedy musíme tyto soubory načíst tlačítkem 'aktualizovat knihovnu' a poté tlačítkem 'vše' zobrazit načtené skladby. Správně se budou zobrazovat pouze skladby s vyplněnými metadaty.
+Aplikace má přístup pouze k soborům ve složce 'hudba' na SD kartě. Po prvním spuštění tedy musíme tyto soubory načíst tlačítkem 'aktualizovat knihovnu' a poté tlačítkem 'vše' zobrazit načtené skladby. Správně se budou zobrazovat pouze skladby s vyplněnými metadaty.
 ##Ovládání
 Jednoduchým kliknutím na položku ji přiřadíme do fronty přehrávání, jejím podržením frontu smažeme a přehrávání začne hned. Při zobrazení fronty je možné mazat položky dlouhým stiskem.
 ##Dokumentace pro programátory
