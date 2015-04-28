@@ -1,17 +1,17 @@
- #MPplayer
+ # MPplayer
 
 Jednoduchý hudební přehrávač s možností seřazovat skladby do fronty.
 
-- **Ukázka:** [screenshoty](https://github.com/chluvac/MPplayer/#Ukázka)
 - **Download:** [release](https://github.com/chluvac/MPplayer/releases/tag/1.01)
-- **Dokumentace:** [uživatelská i programátorská dokumentace](http://abc) (link na PDFko na githubu)
+- **Dokumentace:** [uživatelská i programátorská dokumentace](https://github.com/chluvac/MPplayer/releases/tag/Dokumentace)
 - **Repozitář:** [chluvac/MPlayer](https://github.com/chluvac/MPplayer) + [fork](http://github.com/gjkcz/MPplayer) v archivu maturitních prací
 - **Autor:** Václav Chlupatý
 - **Maturitní práce 2014/15** na [GJK](https://github.com/gjkcz/gjkcz)
+- **Ukázka:** níže
 
 ##Dokumentace pro uživatele
 ###Instalace
-K instalaci aplikace je potřeba pouze stažený release. Před jeho otevřením v zařízení je třeba dočasně povolit instalaci z neznámých zdrojů v Nastavení/Osobní/Zabezpečení.
+K instalaci aplikace je potřeba pouze stažený release. Před jeho otevřením v zařízení je třeba dočasně povolit instalaci z neznámých zdrojů v Nastavení - Osobní - Zabezpečení.
 ###Spuštění
 Aplikace má přístup pouze k soborům ve složce 'hudba' na externí SD kartě. Po prvním spuštění tedy musíme tyto soubory načíst tlačítkem 'aktualizovat knihovnu' a poté tlačítkem 'vše' zobrazit načtené skladby. Správně se budou zobrazovat pouze skladby s vyplněnými metadaty.
 ##Ovládání
