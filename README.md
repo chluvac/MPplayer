@@ -7,7 +7,6 @@ Jednoduchý hudební přehrávač s možností seřazovat skladby do fronty.
 - **Repozitář:** [chluvac/MPplayer](https://github.com/chluvac/MPplayer) + [fork](http://github.com/gjkcz/MPplayer) v archivu maturitních prací
 - **Autor:** Václav Chlupatý
 - **Maturitní práce 2014/15** na [GJK](https://github.com/gjkcz/gjkcz)
-- **Ukázka:** níže
 
 ##Dokumentace pro uživatele
 ###Instalace
@@ -22,4 +21,3 @@ V programu [Android studio](https://developer.android.com/sdk/index.html) import
 ###Struktura kódu
 Třída MainActicity spravuje uživatelské prostředí a vstup volá odpovídající metody ostatních tříd. PlaybackManager spravuje frontu a objekt MediaPlayer, který zajišťuje přehrávání souborů. DatabaseHepler vytváří databázi, se kterou poté DatabaseHandler pracuje.
 AdapterCreator vytváří adaptér, který vytvoří vyžádaný náhled v uživatelském prostředí.
-##Ukázka
