@@ -1,4 +1,4 @@
- # MPplayer
+# MPplayer
 
 Jednoduchý hudební přehrávač s možností seřazovat skladby do fronty.
 
